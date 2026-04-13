@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.hospitalmanagementsystem.ui.theme.screens.dashboard.DashboardScreen
 import com.example.hospitalmanagementsystem.ui.theme.screens.login.LoginScren
+import com.example.hospitalmanagementsystem.ui.theme.screens.patient.AddPatientScreen
 import com.example.hospitalmanagementsystem.ui.theme.screens.register.RegisterScreen
 
 //Mapping the route
@@ -19,6 +20,7 @@ fun AppNavHost(navController: NavHostController = rememberNavController(),
         composable(ROUTE_REGISTER) { RegisterScreen(navController) }
         composable(ROUTE_LOGIN) { LoginScren(navController) }
         composable(ROUTE_DASHBOARD) { DashboardScreen(navController) }
+        composable(ROUTE_ADD_PATIENT) { AddPatientScreen(navController) }
     }
 
 }
