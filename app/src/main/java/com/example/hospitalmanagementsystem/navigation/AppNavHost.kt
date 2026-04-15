@@ -14,7 +14,7 @@ import com.example.hospitalmanagementsystem.ui.theme.screens.register.RegisterSc
 //Mapping the route
 @Composable
 fun AppNavHost(navController: NavHostController = rememberNavController(),
-               startDestination:String = ROUTE_REGISTER){
+               startDestination:String = ROUTE_ADD_PATIENT){
     NavHost(navController = navController, startDestination = startDestination){
 //        this is the mapping codes
         composable(ROUTE_REGISTER) { RegisterScreen(navController) }

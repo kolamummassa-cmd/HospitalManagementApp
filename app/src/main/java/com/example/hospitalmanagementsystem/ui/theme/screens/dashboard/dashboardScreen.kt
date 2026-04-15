@@ -2,6 +2,7 @@ package com.example.hospitalmanagementsystem.ui.theme.screens.dashboard
 
 import android.annotation.SuppressLint
 import android.graphics.drawable.Icon
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -43,6 +44,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.hospitalmanagementsystem.data.AuthViewModel
+import com.example.hospitalmanagementsystem.navigation.ROUTE_ADD_PATIENT
+import com.example.hospitalmanagementsystem.navigation.ROUTE_REGISTER
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -172,6 +175,7 @@ fun DashboardScreen(navController: NavController){
                     Spacer(modifier = Modifier.width(16.dp))
                     Column {
                         Text(text = "Add Patient",
+                            modifier = Modifier.clickable{ navController.navigate(ROUTE_ADD_PATIENT)},
                             fontSize  = 18.sp,
                             color = Color.Black)
                         Text("Register new patient details",
