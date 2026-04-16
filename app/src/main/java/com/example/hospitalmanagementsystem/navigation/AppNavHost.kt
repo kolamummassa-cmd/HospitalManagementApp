@@ -9,18 +9,20 @@ import androidx.navigation.compose.rememberNavController
 import com.example.hospitalmanagementsystem.ui.theme.screens.dashboard.DashboardScreen
 import com.example.hospitalmanagementsystem.ui.theme.screens.login.LoginScren
 import com.example.hospitalmanagementsystem.ui.theme.screens.patient.AddPatientScreen
+import com.example.hospitalmanagementsystem.ui.theme.screens.patient.PatientListScreen
 import com.example.hospitalmanagementsystem.ui.theme.screens.register.RegisterScreen
 
 //Mapping the route
 @Composable
 fun AppNavHost(navController: NavHostController = rememberNavController(),
-               startDestination:String = ROUTE_ADD_PATIENT){
+               startDestination:String = ROUTE_DASHBOARD){
     NavHost(navController = navController, startDestination = startDestination){
 //        this is the mapping codes
         composable(ROUTE_REGISTER) { RegisterScreen(navController) }
         composable(ROUTE_LOGIN) { LoginScren(navController) }
         composable(ROUTE_DASHBOARD) { DashboardScreen(navController) }
         composable(ROUTE_ADD_PATIENT) { AddPatientScreen(navController) }
+        composable(ROUTE_VIEW_PATIENT) { PatientListScreen(navController) }
     }
 
 }

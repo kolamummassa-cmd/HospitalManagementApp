@@ -1,9 +1,11 @@
 package com.example.hospitalmanagementsystem.ui.theme.screens.patient
 
+import android.icu.util.Calendar
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -17,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -54,12 +57,24 @@ fun AddPatientScreen(navController: NavController){
     var name by remember { mutableStateOf("") }
     var gender by remember { mutableStateOf("") }
     var dateOfVisit by remember { mutableStateOf("") }
+    val calendar = Calendar.getInstance()
+//    val datePickerDialog = DatePickerDialog(
+//        context{
+//
+//        _, year, month, day ->
+//            dateOfVisit = "$day/${month + 1}/$year"
+//        },
+//        calendar.get(Calendar.YEAR),
+//        calendar.get(Calendar.MONTH),
+//        calendar.get(Calendar.DAY_OF_MONTH)
+//    )
     var age by remember { mutableStateOf("") }
     var phone by remember { mutableStateOf("") }
     var illness by remember { mutableStateOf("") }
     val options = listOf("Male", "Female", "Other", "Prefer not to say")
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     var expanded by remember { mutableStateOf(false) }
+
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
@@ -169,11 +184,12 @@ fun AddPatientScreen(navController: NavController){
             )
             OutlinedTextField(
                 value = dateOfVisit,
-                onValueChange = {dateOfVisit = it},
+                onValueChange = {},
+                readOnly = true,
                 label = { Text(text = "Date Of Visit")},
                 placeholder = {Text(text = "Enter Date Of Visit")},
                 shape = RoundedCornerShape(20.dp),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().clickable{}
             )
             Spacer(modifier = Modifier.width(20.dp))
             Button (

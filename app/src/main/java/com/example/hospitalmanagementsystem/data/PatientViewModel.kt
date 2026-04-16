@@ -5,10 +5,12 @@ import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import com.example.hospitalmanagementsystem.models.PatientModel
 import com.example.hospitalmanagementsystem.navigation.ROUTE_DASHBOARD
 
 
@@ -27,6 +29,7 @@ import okhttp3.RequestBody
 import java.io.InputStream
 
 class PatientViewModel:ViewModel() {
+
     val cloudinaryUrl = "https://api.cloudinary.com/v1_1/dfmys5kge/image/upload"
     val uploadPreset = "image_folder"
 
@@ -77,6 +80,25 @@ class PatientViewModel:ViewModel() {
         return secureUrl ?: throw Exception("Failed to get image URL")
     }
 
+    private val _patients = mutableStateListOf<PatientModel>()
+    val patient: List<PatientModel> = _patients
+    fun fetchPatient(context: Context){
+
+        val ref = FirebaseDatabase.getInstance().getReference("Patients")
+        ref.get().addOnSuccessListener { snapshot ->
+            _patients.clear()
+            for (child in snapshot.children){
+                val patient = child.getValue(PatientModel::class.java)
+                patient?.let {
+                    it.id = child.key
+                    _patients.add(it)
+                }
+            }
+        }.addOnSuccessListener {
+            Toast.makeText(context,"Failed to load patients", Toast.LENGTH_LONG).show()
+        }
+    }
+
 
 
 
@@ -84,3 +106,6 @@ class PatientViewModel:ViewModel() {
 
 
 }
+
+
+
