@@ -30,6 +30,7 @@ import java.io.InputStream
 
 class PatientViewModel:ViewModel() {
 
+
     val cloudinaryUrl = "https://api.cloudinary.com/v1_1/dfmys5kge/image/upload"
     val uploadPreset = "image_folder"
 

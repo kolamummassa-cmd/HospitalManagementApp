@@ -1,11 +1,15 @@
 package com.example.hospitalmanagementsystem.ui.theme.screens.patient
 
-import android.icu.util.Calendar
+import android.app.Activity
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.rememberDatePickerState
+import java.util.Calendar
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -30,6 +34,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -57,30 +62,34 @@ fun AddPatientScreen(navController: NavController){
     var name by remember { mutableStateOf("") }
     var gender by remember { mutableStateOf("") }
     var dateOfVisit by remember { mutableStateOf("") }
-    val calendar = Calendar.getInstance()
-//    val datePickerDialog = DatePickerDialog(
-//        context{
+    val context = LocalContext.current
+//    val calendar = Calendar.getInstance()
+//    val datePickerDialog = android.app.DatePickerDialog(
+//        context,
 //
-//        _, year, month, day ->
+//        { _, year, month, day ->
 //            dateOfVisit = "$day/${month + 1}/$year"
 //        },
 //        calendar.get(Calendar.YEAR),
 //        calendar.get(Calendar.MONTH),
 //        calendar.get(Calendar.DAY_OF_MONTH)
 //    )
+//    val datePickerState = rememberDatePickerState()
     var age by remember { mutableStateOf("") }
+//    var showDatePicker by remember { mutableStateOf(false) }
     var phone by remember { mutableStateOf("") }
     var illness by remember { mutableStateOf("") }
     val options = listOf("Male", "Female", "Other", "Prefer not to say")
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     var expanded by remember { mutableStateOf(false) }
+//    val interactionSource = remember { MutableInteractionSource() }
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         imageUri = uri
     }
-    val context = LocalContext.current
+//    val context = LocalContext.current
     Scaffold(topBar = {
         TopAppBar(title = { Text(text = "AddPatient") },
             colors = TopAppBarDefaults.topAppBarColors(
@@ -182,15 +191,18 @@ fun AddPatientScreen(navController: NavController){
                 shape = RoundedCornerShape(20.dp),
                 modifier = Modifier.fillMaxWidth()
             )
+
             OutlinedTextField(
                 value = dateOfVisit,
-                onValueChange = {},
-                readOnly = true,
+                onValueChange = {dateOfVisit = it},
+//                readOnly = true,
                 label = { Text(text = "Date Of Visit")},
-                placeholder = {Text(text = "Enter Date Of Visit")},
+
                 shape = RoundedCornerShape(20.dp),
-                modifier = Modifier.fillMaxWidth().clickable{}
+                modifier = Modifier
+                    .fillMaxWidth()
             )
+
             Spacer(modifier = Modifier.width(20.dp))
             Button (
                 onClick = {

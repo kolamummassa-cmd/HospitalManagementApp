@@ -1,4 +1,5 @@
 package com.example.hospitalmanagementsystem
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -16,6 +17,7 @@ import com.example.hospitalmanagementsystem.ui.theme.HospitalManagementSystemThe
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
