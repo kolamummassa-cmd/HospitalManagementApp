@@ -12,7 +12,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.hospitalmanagementsystem.models.PatientModel
 import com.example.hospitalmanagementsystem.navigation.ROUTE_DASHBOARD
-
+import com.example.hospitalmanagementsystem.navigation.ROUTE_VIEW_PATIENT
 
 
 import com.google.firebase.database.FirebaseDatabase
@@ -97,6 +97,34 @@ class PatientViewModel:ViewModel() {
             }
         }.addOnSuccessListener {
             Toast.makeText(context,"Failed to load patients", Toast.LENGTH_LONG).show()
+        }
+    }
+    fun updatePatient(patientId: String, imageUri: Uri?,name: String,age: String,phone: String,illness: String,context: Context,navController: NavController){
+        viewModelScope.launch (Dispatchers.IO){ try {
+            val imageUri = imageUri?.let { uploadToCloudinary(context,it) }
+            val updatePatient = mapOf(
+                "id" to patientId,
+                "name" to name,
+                "age" to age,
+                "phone" to phone,
+                "illness" to illness,
+                "imageUrl" to imageUri
+            )
+            val ref  = FirebaseDatabase.getInstance()
+                .getReference("Patients").child(patientId)
+            ref.setValue(updatePatient).await()
+            fetchPatient(context)
+            withContext(Dispatchers.Main){
+                Toast.makeText(context,"Patient updated successfully",
+                    Toast.LENGTH_LONG).show()
+                navController.navigate(ROUTE_VIEW_PATIENT)
+            }
+        }catch (e: Exception){
+            withContext(Dispatchers.Main){
+                Toast.makeText(context,"Patient updated failed",
+                    Toast.LENGTH_LONG).show()
+            }
+        }
         }
     }
 
