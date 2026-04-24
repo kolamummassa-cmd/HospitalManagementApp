@@ -4,7 +4,9 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
@@ -33,9 +35,15 @@ class PatientViewModel:ViewModel() {
 
     val cloudinaryUrl = "https://api.cloudinary.com/v1_1/dfmys5kge/image/upload"
     val uploadPreset = "image_folder"
+    var isUploading by androidx.compose.runtime.mutableStateOf(false)
+        private set
 
     fun uploadPatient(imageUri: Uri?,name:String,age:String,phone:String,illness:String,
                       context: Context,navController: NavController){
+
+        if (isUploading) return
+        isUploading = true
+
 
         viewModelScope.launch (Dispatchers.IO){
             try {
@@ -59,6 +67,8 @@ class PatientViewModel:ViewModel() {
                 withContext(Dispatchers.Main){
                     Toast.makeText(context,"Patient not saved",Toast.LENGTH_LONG).show()
                 }
+            }finally {
+                isUploading = false
             }
         }
     }
@@ -99,36 +109,53 @@ class PatientViewModel:ViewModel() {
             Toast.makeText(context,"Failed to load patients", Toast.LENGTH_LONG).show()
         }
     }
-    fun updatePatient(patientId: String, imageUri: Uri?,name: String,age: String,phone: String,illness: String,context: Context,navController: NavController){
-        viewModelScope.launch (Dispatchers.IO){ try {
-            val imageUri = imageUri?.let { uploadToCloudinary(context,it) }
-            val updatePatient = mapOf(
-                "id" to patientId,
-                "name" to name,
-                "age" to age,
-                "phone" to phone,
-                "illness" to illness,
-                "imageUrl" to imageUri
-            )
-            val ref  = FirebaseDatabase.getInstance()
-                .getReference("Patients").child(patientId)
-            ref.setValue(updatePatient).await()
-            fetchPatient(context)
-            withContext(Dispatchers.Main){
-                Toast.makeText(context,"Patient updated successfully",
-                    Toast.LENGTH_LONG).show()
-                navController.navigate(ROUTE_VIEW_PATIENT)
-            }
-        }catch (e: Exception){
-            withContext(Dispatchers.Main){
-                Toast.makeText(context,"Patient updated failed",
-                    Toast.LENGTH_LONG).show()
+    fun updatePatient(patientId: String, imageUri: Uri?,name: String,age: String,phone: String,illness: String,context: Context,navController: NavController) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val imageUri = imageUri?.let { uploadToCloudinary(context, it) }
+                val updatePatient = mapOf(
+                    "id" to patientId,
+                    "name" to name,
+                    "age" to age,
+                    "phone" to phone,
+                    "illness" to illness,
+                    "imageUrl" to imageUri
+                )
+                val ref = FirebaseDatabase.getInstance()
+                    .getReference("Patients").child(patientId)
+                ref.setValue(updatePatient).await()
+                fetchPatient(context)
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        context, "Patient updated successfully",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    navController.navigate(ROUTE_VIEW_PATIENT)
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        context, "Patient updated failed",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             }
         }
-        }
+
     }
 
-
+    fun deletePatient(patientId: String, context: Context) {
+        val ref = FirebaseDatabase.getInstance()
+            .getReference("Patient").child(patientId)
+        ref.removeValue().addOnSuccessListener {
+            _patients.removeAll { it.id == patientId }
+        }.addOnSuccessListener {
+            Toast.makeText(
+                context, "Patient delete Successfully",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
 
 
 

@@ -213,6 +213,7 @@ fun AddPatientScreen(navController: NavController){
                         phone,illness, context, navController)
 
                 },
+                enabled = !patientViewModel.isUploading,
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(10.dp)
             )

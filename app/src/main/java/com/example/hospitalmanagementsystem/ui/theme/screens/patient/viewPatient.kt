@@ -66,7 +66,7 @@ fun PatientListScreen(navController: NavController) {
         items(patients) { patient ->
             PatientCard(
                 patient = patient,
-                onDelete = {  },
+                onDelete = { patientId -> patientViewModel.deletePatient(patientId,context) },
                 navController = navController
             )
         }
@@ -155,7 +155,7 @@ fun PatientCard(
                 horizontalArrangement = Arrangement.End
             ) {
                 TextButton(
-                    onClick = { navController.navigate("update_patient/${patient.id}") }
+                    onClick = { navController.navigate("updatepatient/${patient.id}") }
                 ) {
                     Text(
                         text = "Update",
